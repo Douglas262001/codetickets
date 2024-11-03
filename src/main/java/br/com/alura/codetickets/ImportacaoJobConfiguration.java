@@ -52,7 +52,7 @@ public class ImportacaoJobConfiguration {
                 .delimited()
                 .delimiter(";")
                 .names("cpf", "cliente", "nascimento", "evento", "data", "tipoIngresso", "valor")
-                .targetType(Importacao.class)
+                .fieldSetMapper(new ImportacaoMapper())
                 .build();
     }
 
@@ -61,8 +61,8 @@ public class ImportacaoJobConfiguration {
         return new JdbcBatchItemWriterBuilder<Importacao>()
                 .dataSource(dataSource)
                 .sql(
-                        "INSERT INTO importacao (id, cpf, cliente, evento, data, tipo_ingresso, valor, hora_importacao) VALUES" +
-                                " (:id, :cpf, :cliente, :evento, :data, :tipo_ingresso, :valor, " + LocalDateTime.now() + ")"
+                        "INSERT INTO importacao (cpf, cliente, nascimento, evento, data, tipo_ingresso, valor, hora_importacao) VALUES" +
+                                " (:cpf, :cliente, :nascimento, :evento, :data, :tipoIngresso, :valor,  :horaImportacao)"
                 )
                 .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
                 .build();
